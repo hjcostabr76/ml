@@ -59,7 +59,7 @@ class Adaline():
       squaredErr = 0
 
       for i in randomLines:
-        gradient, error = self.__getWGradient(self._X[i], self._Y[i])
+        gradient, error = self._getWGradient(self._X[i], self._Y[i])
         self._w += self._step * gradient
         squaredErr += error**2
       
@@ -70,7 +70,7 @@ class Adaline():
     return self._w
 
   def getPrediction(self, x: np.array) -> float:
-    return self.__activationFunction(self.getApproximation(x))
+    return self._activationFunction(self.getApproximation(x))
 
   def getApproximation(self, x: np.array) -> float:
     '''
@@ -85,7 +85,7 @@ class Adaline():
       raise ValueError('x vector and w vector must have the same shape. ' + str(xShape) + ' and ' + str(wShape) + ' received.')
     
     # Approximate
-    return self._w.dot(xExtended)
+    return np.dot(xExtended, self._w)
 
   def getW(self) -> np.array:
     return self._w
@@ -93,7 +93,7 @@ class Adaline():
   def getErrorHistory(self) -> np.array:
     return self._errorHistory
 
-  def __getWGradient(self, x: np.array, y: float) -> 'tuple[float, float]':
+  def _getWGradient(self, x: np.array, y: float) -> 'tuple[float, float]':
     '''
         Set and return the gradient for the w weights vector.
     '''
@@ -102,7 +102,7 @@ class Adaline():
     gradient = error * np.append(x, 1)
     return gradient, error
 
-  def __activationFunction(self, yApprox: float) -> float:
+  def _activationFunction(self, yApprox: float) -> float:
     '''
         Activation Function: Identity Function
     '''
