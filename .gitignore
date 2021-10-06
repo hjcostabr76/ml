@@ -1,3 +1,9 @@
 .vscode/*
 !.vscode/launch.json
 __pycache__
+
+logs
+
+# TODO: Check if it should really be ignored
+metadata.tsv
+vectors.tsv
