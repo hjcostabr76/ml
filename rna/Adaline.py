@@ -18,7 +18,7 @@ class Adaline():
               X: np.array, Y: np.array,
               step = .1, tolerance = .1, maxIterations = 100,
               minW = -1, maxW = 1, w: np.array = None,
-              ):  
+              ):
 
     self._maxIterations = maxIterations
     self._tolerance = tolerance

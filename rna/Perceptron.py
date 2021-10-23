@@ -75,9 +75,9 @@ class Perceptron(Adaline):
 
         TODO: 2021-09-25 - Figure out why the definition equation isn't working (ut only converges without multiplying per diff)
     '''
-    return 1
-    # actFunction = self._activationFunction(x)
-    # return actFunction * (1 - actFunction)
+
+    actFunction = self._activationFunction(x) 
+    return actFunction * (1 - actFunction)
 
   def __getActvFuncDiffWithStep(self, x: float) -> float:
     '''
