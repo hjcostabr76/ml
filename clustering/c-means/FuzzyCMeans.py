@@ -19,11 +19,7 @@ class FuzzyCMeans:
     __obj: float
     __centroids: np.array
 
-    def __init__(self,
-        X: np.array, k: int, m: float,
-        maxDelta = .001, maxEpochs = 1000,
-        partition: np.array = np.array([])
-    ) -> object:
+    def __init__(self, X: np.array, k: int, m: float, maxDelta = .001, maxEpochs = 1000) -> object:
 
         if (maxDelta <= 0 or maxDelta > 1):
             raise ValueError('"maxDelta" should be a positive float minor then 1')
@@ -36,13 +32,8 @@ class FuzzyCMeans:
         self.__maxDelta = maxDelta
         self.__maxEpochs = maxEpochs
 
-        hasPresetPartition = partition.shape[0] or partition.shape[1]
-        if hasPresetPartition:
-            self.__U = partition
-        else:
-            aux = np.zeros( (X.shape[0], k) )
-            self.__U = np.apply_along_axis(lambda _: FuzzyCMeans.__getNumbersSummingToOne(k), 1, aux)
-
+        aux = np.zeros( (X.shape[0], k) )
+        self.__U = np.apply_along_axis(lambda _: FuzzyCMeans.__getNumbersSummingToOne(k), 1, aux)
         self.__setCentroids()
         self.__objFunction()
 
