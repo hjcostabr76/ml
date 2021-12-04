@@ -8,3 +8,5 @@ logs
 
 # Custom
 **/*file/*
+!ds_*
+!in_*
