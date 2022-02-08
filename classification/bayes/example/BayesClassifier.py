@@ -23,6 +23,7 @@ def plot_by_class_better(dataset, classes, title):
     plt.title(title)
     plt.show()
     return
+
 def createDataPoint():
     x = -3
     y = -8
