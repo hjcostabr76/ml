@@ -1,0 +1,12 @@
+
+
+
+------------------------------------------------------------------------
+version = '02'
+
+# Hyper Parameters
+n_epochs = 4
+w_decay = 1e-3
+momentum = 0.9
+batch_size = 32
+learn_rate = 0.001
