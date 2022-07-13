@@ -6,6 +6,7 @@
 version = '02'
 
 # Hyper Parameters
+
 n_epochs = 4
 w_decay = 1e-3
 momentum = 0.9
@@ -31,6 +32,8 @@ transf_resize_train = 60
 ------------------------------------------------------------------------
 version = '03'
 
+# Hyper Parameters
+
 n_epochs = 4
 w_decay = 1e-3
 momentum = 0.9
@@ -50,3 +53,57 @@ Precision (average): 0.9476
 Recall (average): 0.6139
 F1 Score (Normal): 0.8960
 F1 Score (Pneumonia): 0.9369
+
+
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+version = '04'
+
+# Hyper Parameters
+
+n_epochs = 4
+w_decay = 1e-3
+momentum = 0.9
+batch_size = 32
+learn_rate = 0.001
+optim_algorithm = 'sgd'
+
+transf_crop = 224
+transf_resize_test = 230
+transf_resize_train = 255
+
+------------------------------------------------------------------------
+# Test Results
+
+Accuracy: 0.9279
+Precision (average): 0.9471
+Recall (average): 0.5994
+F1 Score (Normal): 0.8993
+F1 Score (Pneumonia): 0.9438
+
+
+------------------------------------------------------------------------
+------------------------------------------------------------------------
+version = '05'
+
+# Hyper Parameters
+
+n_epochs = 4
+w_decay = 1e-3
+momentum = 0.9
+batch_size = 128
+learn_rate = 0.001
+optim_algorithm = 'sgd'
+
+transf_crop = 224
+transf_resize_test = 230
+transf_resize_train = 255
+
+------------------------------------------------------------------------
+# Test Results
+
+Accuracy: 0.9135
+Precision (average): 0.9255
+Recall (average): 0.6321
+F1 Score (Normal): 0.8789
+F1 Score (Pneumonia): 0.9327
