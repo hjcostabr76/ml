@@ -41,13 +41,11 @@ class Combiner:
         '''
     
         # Features
-        file_feat = base_name + '-lpc.npy'
-        path_feat = os.path.join(self.feature_dir, file_feat)
+        path_feat = os.path.join(self.feature_dir, base_name + '.npy')
         feature = np.load(path_feat)
 
         # Blendshapes
-        file_blendshape = base_name + '.json'
-        path_blendshape = os.path.join(self.blendshape_dir, file_blendshape)
+        path_blendshape = os.path.join(self.blendshape_dir, base_name + '.json')
 
         f = open(path_blendshape)
         data = json.load(f)
