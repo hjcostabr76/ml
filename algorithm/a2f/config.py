@@ -4,6 +4,18 @@
 '''
 
 
+# hyper-parameters
+n_blendshape = 46
+learning_rate = 0.0001
+batch_size = 100
+epochs = 500
+
+print_freq = 20
+checkpoint_freq = 100
+
+best_loss = 10000000
+
+
 # *
 # dataset = 'emma'
 # dataroot = '../file'
@@ -29,6 +41,30 @@ feature_path = os.path.join(dataroot, 'feature-lpc')
 # if not os.path.isdir(feature_path): os.mkdir(feature_path)
 
 
+
+# dataroot = 'data/audio2bs'
+modelo_id = 'LSTMNvidiaNet'
+
+dataroot = './file'
+data_path = os.path.join(dataroot, 'emma-combine')
+val_path = os.path.join(data_path, 'val')
+train_path = os.path.join(data_path, 'train')
+
+blend_shape_file = 'blendshape.txt'
+feature_file = 'feature-lpc.npy'
+
+# checkpoint_path = './' + dataset + '_' + modelo_id + '/'
+checkpoint_path = os.path.join(dataroot, 'emma-checkpoint', modelo_id)
+
+
+
+# dataroot = './file'
+# modelo_id = 'LSTMNvidiaNet'
+data_path = os.path.join(dataroot, 'emma-combine')
+val_path = os.path.join(data_path, 'val')
+# train_path = os.path.join(data_path, 'train')
+# blend_shape_file = 'blendshape.txt'
+feature_file = 'feature-lpc.npy'
 
 
 
