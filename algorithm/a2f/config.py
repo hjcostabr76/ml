@@ -22,8 +22,11 @@ blendshape_dir = os.path.join(dataroot, 'emma-a2f-json')
 
 
 
-
-
+# data path
+dataroot = './file'
+wav_path = os.path.join(dataroot, 'emma-subset-16k')
+feature_path = os.path.join(dataroot, 'feature-lpc')
+# if not os.path.isdir(feature_path): os.mkdir(feature_path)
 
 
 
@@ -67,3 +70,5 @@ test_files = [
 ]
 
 skipped_files = test_files + problems_frame_diff + problems_too_short
+
+# skipped_files = ['Chapter_19-104.wav', 'Chapter_25-121.wav', 'Chapter_42-166.wav']

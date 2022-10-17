@@ -1,29 +1,19 @@
 import os
-# from tqdm import tqdm
 from . import LPC
-
-'''
-    TODO: 2022-10-11 - ADD Description
-    TODO: 2022-10-11 - ADD Description
-    TODO: 2022-10-11 - ADD Description
-    TODO: 2022-10-11 - ADD Description
-    TODO: 2022-10-11 - ADD Description
-    TODO: 2022-10-11 - ADD Description
-    TODO: 2022-10-11 - ADD Description
-'''
+from . import paths
 
 
 lpc = LPC(_num_worker=_num_worker)
+wav_files = os.listdir(wav_path)
 
-
-for wav_file in skipped_files:
-    base_name = wav_file.split('.')[0]
-    feature_file = base_name + '-lpc' + '.npy'
-    path_wav_file = os.path.join(wav_path, wav_file)
-    path_feature_file = os.path.join(feature_path, feature_file)
+for wav_file in wav_files:
+    if wav_file in skipped_files: continue
 
     try:
-        lpc.audio_lpc(path_wav_file, path_feature_file)
+        feature = lpc.wav2lpc(wav_file=os.path.join(wav_path, wav_file))
+        feature_file = os.path.join(feature_path, paths.feature_file(base_name))
+        np.save(feature_file, feature)
+    
     except AssertionError as error:
         print(error)
         print(f'failed file: "{wav_file}"')

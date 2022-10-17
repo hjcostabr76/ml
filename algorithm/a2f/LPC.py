@@ -11,7 +11,7 @@ class LPC:
     def __init__(self, _num_worker):
         self._num_worker = _num_worker
 
-    def audio_lpc(self, wav_file, feature_file):
+    def wav2lpc(self, wav_file: str) -> np.array:
         (rate, sig) = wav.read(wav_file)
 
         videorate = 24
@@ -35,8 +35,6 @@ class LPC:
 
         for win in range(win_count):
             output[win] = lpc_feature[2*win : 2*win+win_size]
-
-        np.save(feature_file, output)
 
     def lpc_K(frame, order=32):
         filt = lpc.nautocor(frame, order=order)
