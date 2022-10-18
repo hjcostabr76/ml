@@ -1,94 +1,30 @@
-'''
-    TODO: 2022-10-17 - ADD Description
-    PARAMETERS
-'''
+import paths
 
-# parameters
-n_blendshape = 46
+n_blendshapes = 46
+n_workers = 6 # TODO: ADD desc
+
+# ===============================================================
+# -- Inference parameters
+
+inference_model_path = paths.model_file('...')
+inference_features_path = ''
+inference_result_path = ''
+
+# ===============================================================
+# -- Training parameters
+
 batch_size = 100
-
-# data path
-dataroot = 'file'
-modelo_id = 'LSTMNvidiaNet'
-# dataset = 'Emma'
-
-checkpoint_path = os.path.join(dataroot, 'emma-checkpoint', modelo_id)
-test_path = os.path.join(dataroot, 'emma-combine', 'val')
-
-
-result_path = os.path.join(dataroot, 'results')
-result_file = os.path.join(result_path, f'{modelo_id}_hat.txt')
-
-blend_shape_file = 'blendshape.txt'
-feature_file = 'feature-lpc.npy'
-
-ckp = 'checkpoint-model_best.pth.tar'
-
-
-
-# hyper-parameters
-n_blendshape = 46
 learning_rate = 0.0001
-batch_size = 100
 epochs = 500
-
-print_freq = 20
-checkpoint_freq = 100
-
 best_loss = 10000000
-
-
-# *
-# dataset = 'emma'
-# dataroot = '../file'
-
-# *
-
 val_rate = .05
-skipped_files = []
-combined_feature_file = 'feature-lpc.npy'
-combined_blendshapes_file = 'blendshape.txt'
 
-# wav_path = os.path.join(dataroot, 'emma-subset-16k')
-feature_dir = os.path.join(dataroot, 'feature-lpc')
-combine_path = os.path.join(dataroot, 'emma-combine')
-blendshape_dir = os.path.join(dataroot, 'emma-a2f-json')
+print_freq = 20 # TODO: ADD Desc
+checkpoint_freq = 100 # Iterations count between partial models (checkpoints) generation
 
 
-
-# data path
-dataroot = './file'
-wav_path = os.path.join(dataroot, 'emma-subset-16k')
-feature_path = os.path.join(dataroot, 'feature-lpc')
-# if not os.path.isdir(feature_path): os.mkdir(feature_path)
-
-
-
-# dataroot = 'data/audio2bs'
-modelo_id = 'LSTMNvidiaNet'
-
-dataroot = './file'
-data_path = os.path.join(dataroot, 'emma-combine')
-val_path = os.path.join(data_path, 'val')
-train_path = os.path.join(data_path, 'train')
-
-blend_shape_file = 'blendshape.txt'
-feature_file = 'feature-lpc.npy'
-
-# checkpoint_path = './' + dataset + '_' + modelo_id + '/'
-checkpoint_path = os.path.join(dataroot, 'emma-checkpoint', modelo_id)
-
-
-
-# dataroot = './file'
-# modelo_id = 'LSTMNvidiaNet'
-data_path = os.path.join(dataroot, 'emma-combine')
-val_path = os.path.join(data_path, 'val')
-# train_path = os.path.join(data_path, 'train')
-# blend_shape_file = 'blendshape.txt'
-feature_file = 'feature-lpc.npy'
-
-
+# ===============================================================
+# -- Set skipped files among the inputs
 
 problems_too_short = [ # Files with less then 64 frames
     'Chapter_19-104',
@@ -116,29 +52,15 @@ problems_frame_diff = [ # Files whose wav frames count is not 32 frames more tha
 ]
 
 test_files = [
-    'Chapter_35-51',
     'Chapter_17-74',
+    'Chapter_18-18',
+    'Chapter_27-370',
+    'Chapter_35-51',
+    'Chapter_36-68',
+    'Chapter_39-250'
     'Chapter_50-47',
     'Chapter_52-120',
     'Chapter_9-219',
-    'Chapter_18-18',
-    'Chapter_27-370',
-    'Chapter_36-68',
-    'Chapter_39-250'
 ]
 
 skipped_files = test_files + problems_frame_diff + problems_too_short
-
-# skipped_files = ['Chapter_19-104.wav', 'Chapter_25-121.wav', 'Chapter_42-166.wav']
-
-
-
-_num_worker = 8
-
-# data path
-dataroot = '. / file'
-wav_path = os.path.join(dataroot, 'emma-subset-16k')
-feature_path = os.path.join(dataroot, 'feature-lpc')
-if not os.path.isdir(feature_path): os.mkdir(feature_path)
-skipped_files = ['Chapter_19-104.wav', 'Chapter_25-121.wav', 'Chapter_42-166.wav']
-# wav_files = os.listdir(wav_path)
