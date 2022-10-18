@@ -1,5 +1,6 @@
 import os
 import json
+import paths
 import numpy as np
 
 class Combiner:
@@ -41,11 +42,11 @@ class Combiner:
         '''
     
         # Features
-        path_feat = os.path.join(self.feature_dir, base_name + '.npy')
+        path_feat = os.path.join(self.feature_dir, paths.feature_file(base_name))
         feature = np.load(path_feat)
 
         # Blendshapes
-        path_blendshape = os.path.join(self.blendshape_dir, base_name + '.json')
+        path_blendshape = os.path.join(self.blendshape_dir, paths.blendshape_file(base_name))
 
         f = open(path_blendshape)
         data = json.load(f)
@@ -56,7 +57,7 @@ class Combiner:
         
         return feature, blendshape
 
-    def __cut(self, wav_feature: list, blendshape_target: list) -> list:
+    def __cut(self, wav_feature: np.array, blendshape_target: np.array) -> list:
         '''
             TODO: 2022-10-11 - Check this shit out!
         '''
