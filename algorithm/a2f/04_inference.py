@@ -1,45 +1,36 @@
 import torch
 import torch.autograd as autograd
 
-import os
 import time
+import config
+import logging
 import numpy as np
 
-from dataset import BlendshapeDataset
 from models import LSTMNvidiaNet
 
-# =========================================================
-# -- Load model -------------------------------------------
-# =========================================================
+# Setup cuda
+logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s', level=logging.INFO)
 
-model = LSTMNvidiaNet(num_blendshapes = n_blendshape)
-checkpoint = torch.load(os.path.join(checkpoint_path, ckp))
+device =  torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+if device == 'cpu':
+    logging.warning('CUDA device not found, migrating to CPU')
 
-print("=> loading checkpoint '{}'".format(ckp))
-print("model epoch {} loss: {}".format(checkpoint['epoch'], checkpoint['eval_loss']))
+logging.info('Device name: %s' % device)
 
-model.load_state_dict(checkpoint['state_dict'])
+# Load model
+logging.info(f"Loading model: '{config.inference_model_path}'")
+model_state = torch.load(config.inference_model_path)
+logging.info(f"Model epoch {model_state.get('epoch')} loss: {model_state.get('eval_loss')}")
 
-if torch.cuda.is_available():
-    model = model.cuda()
-    print('cuda')
-else:
-    print('-'*10 + '!! NO CUDA !!' + '-'*10)
+model = LSTMNvidiaNet(num_blendshapes=config.n_blendshapes)
+model.load_state_dict(model_state.get('state_dict'))
 
-# =========================================================
-# -- Prepare data loaders ---------------------------------
-# =========================================================
+# Prepare loader
+features = torch.from_numpy(np.load(config.inference_features_path))
+target_dummy = torch.from_numpy(np.zeros(features.shape[0])) # NOTE: We don't care about labels here
+test_loader = DataLoader(TensorDataset(features, target_dummy), batch_size=batch_size, num_workers=2, shuffle=False)
 
-test_ds = BlendshapeDataset(
-    feature_file=os.path.join(test_path, feature_file),
-    target_file=os.path.join(test_path, blend_shape_file)
-)
-test_loader = torch.utils.data.DataLoader(test_ds, batch_size=batch_size, shuffle=False, num_workers=2)
-
-# =========================================================
-# -- Test -------------------------------------------------
-# =========================================================
-
+# Run inference
 model.eval()
 
 start_time = time.time()
@@ -50,16 +41,16 @@ with torch.no_grad():
         if torch.cuda.is_available():
             input_var = input_var.cuda()
 
-        output = model(input_var)
-
+        blendshapes = model(input_var)
         if i == 0:
-            output_cat = output.data
+            output = blendshapes.data
         else:
-            output_cat = torch.cat((output_cat, output.data), 0)
+            output = torch.cat((output, blendshapes.data), 0)
 
-output_cat = output_cat.cpu().numpy() * 100.0
-with open(result_file, 'wb') as f:
-    np.savetxt(f, output_cat, fmt='%.6f')
+# Save inferred blendshapes
+output = output.cpu().numpy() * 100.0
+with open(config.inference_result_path, 'wb') as f:
+    np.savetxt(f, output, fmt='%.6f')
 
 past_time = time.time() - start_time
-print("Test finished in {:.4f} sec! Saved in {}".format(past_time, result_file))
+logging.info("Test finished in {:.4f} sec! Saved in {}".format(past_time, result_file))
