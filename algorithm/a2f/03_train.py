@@ -7,51 +7,53 @@ import torch.optim as optim
 import os
 import time
 import paths
+import config
+import logging
 
+from utils import setup_cuda
 from datetime import datetime
 from dataset import BlendshapeDataset
 from models import LSTMNvidiaNet
 
+def save_checkpoint(epoch: int, model: nn.Module, eval_loss: float, is_best: bool = False):
+    torch.save({
+        'epoch': epoch + 1,
+        'state_dict': model.state_dict(),
+        'eval_loss': eval_loss,
+        },
+        paths.checkpoint_file(epoch=epoch, is_best=is_best)
+    )
 
-# =========================================================
-# -- Create model -----------------------------------------
-# =========================================================
+# Setup cuda
+logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s', level=logging.INFO)
 
-model = LSTMNvidiaNet(num_blendshapes=n_blendshape)
-criterion = nn.MSELoss() #??.cuda()
+device =  torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+if device == 'cpu':
+    logging.warning('CUDA device not found, migrating to CPU')
+
+logging.info('Device name: %s' % device)
+
+# Create model
+model = LSTMNvidiaNet(num_blendshapes=config.n_blendshapes)
+criterion = nn.MSELoss()
 optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
 if torch.cuda.is_available():
     model = model.cuda()
-    print('Running with CUDA')
-else:
-    print('-'*10 + ' NO CUDA! ' + '-'*10)
 
+# Prepare loaders
+train_ds = BlendshapeDataset(feature_file=paths.combined_features('train'), target_file=paths.combined_blendshapes('train'))
+train_loader = torch.utils.data.DataLoader(train_ds, batch_size=batch_size, num_workers=2, shuffle=True)
 
-# =========================================================
-# -- Prepare data loaders ---------------------------------
-# =========================================================
-
-# Training
-train_ds = BlendshapeDataset(
-    feature_file=os.path.join(train_path, combined_feature_file),
-    target_file=os.path.join(train_path, combined_blendshapes_file)
-)
-train_loader = torch.utils.data.DataLoader(train_ds, shuffle=True, batch_size=batch_size, num_workers=2)
-
-# Validation
-val_ds = BlendshapeDataset(
-    feature_file=os.path.join(val_path, combined_feature_file),
-    target_file=os.path.join(val_path, combined_blendshapes_file),
-)
-val_loader = torch.utils.data.DataLoader(val_ds, shuffle=False, batch_size=batch_size, num_workers=2)
+val_ds = BlendshapeDataset(feature_file=paths.combined_features('val'), target_file=paths.combined_blendshapes('val'))
+val_loader = torch.utils.data.DataLoader(val_ds, batch_size=batch_size, num_workers=2, shuffle=False)
 
 
 # =========================================================
 # -- Train ------------------------------------------------
 # =========================================================
 
-print('------------\n Training begin at %s' % datetime.now())
+logging.info('Training begin at %s' % datetime.now())
 
 n_train = len(train_loader)
 n_val = len(val_loader)
@@ -85,8 +87,8 @@ for epoch in range(epochs):
         # Log progress
         should_log = print_freq != -1 and i % print_freq == 0
         if should_log:
-            print('Training -- epoch: {:03} | iteration: {}/{} | loss: {:.6f} \r'
-                    .format(epoch + 1, i, n_train, loss.data[0]))
+            logging.info('Training -- epoch: {:03} | iteration: {}/{} | loss: {:.6f} \r'
+                .format(epoch + 1, i, n_train, loss.data[0]))
 
     train_loss /= len(train_loader)
 
@@ -113,7 +115,7 @@ for epoch in range(epochs):
 
     # Log epoch progress
     past_time = time.time() - start_time
-    print('epoch: {:03} | train_loss: {:.6f} | eval_loss: {:.6f} | {:.4f} sec/epoch \r'
+    logging.info('epoch: {:03} | train_loss: {:.6f} | eval_loss: {:.6f} | {:.4f} sec/epoch \r'
         .format(epoch+1, train_loss, eval_loss, past_time))
 
     # Save checkpoint models
@@ -125,4 +127,4 @@ for epoch in range(epochs):
     if (epoch + 1) % checkpoint_freq == 0:
         save_checkpoint(epoch=epoch, model=model, eval_loss=eval_loss)
 
-print('Training finished at %s' % datetime.now())
+log.info('Training finished at %s' % datetime.now())
