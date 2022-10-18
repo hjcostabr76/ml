@@ -3,6 +3,28 @@
     PARAMETERS
 '''
 
+# parameters
+n_blendshape = 46
+batch_size = 100
+
+# data path
+dataroot = 'file'
+modelo_id = 'LSTMNvidiaNet'
+# dataset = 'Emma'
+
+checkpoint_path = os.path.join(dataroot, 'emma-checkpoint', modelo_id)
+test_path = os.path.join(dataroot, 'emma-combine', 'val')
+
+
+result_path = os.path.join(dataroot, 'results')
+result_file = os.path.join(result_path, f'{modelo_id}_hat.txt')
+
+blend_shape_file = 'blendshape.txt'
+feature_file = 'feature-lpc.npy'
+
+ckp = 'checkpoint-model_best.pth.tar'
+
+
 
 # hyper-parameters
 n_blendshape = 46
@@ -108,3 +130,15 @@ test_files = [
 skipped_files = test_files + problems_frame_diff + problems_too_short
 
 # skipped_files = ['Chapter_19-104.wav', 'Chapter_25-121.wav', 'Chapter_42-166.wav']
+
+
+
+_num_worker = 8
+
+# data path
+dataroot = '. / file'
+wav_path = os.path.join(dataroot, 'emma-subset-16k')
+feature_path = os.path.join(dataroot, 'feature-lpc')
+if not os.path.isdir(feature_path): os.mkdir(feature_path)
+skipped_files = ['Chapter_19-104.wav', 'Chapter_25-121.wav', 'Chapter_42-166.wav']
+# wav_files = os.listdir(wav_path)
