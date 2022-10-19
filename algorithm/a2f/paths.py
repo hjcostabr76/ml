@@ -1,15 +1,11 @@
 import os
-
-dataroot = './file/emma'
+from config import dataroot 
 
 wav_dir = os.path.join(dataroot, 'wav')
 blendshape_dir = os.path.join(dataroot, 'blendshape')
 feature_dir = os.path.join(dataroot, 'feature')
 dataset_dir = os.path.join(dataroot, 'dataset')
 model_dir = os.path.join(dataroot, 'model')
-
-train_dir = os.path.join(dataset_dir, 'train')
-val_dir = os.path.join(dataset_dir, 'val')
 
 
 ## ----------------------------------------

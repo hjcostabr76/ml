@@ -1,7 +1,10 @@
 import paths
+import os
 
 n_blendshapes = 46
 n_workers = 6 # TODO: ADD desc
+
+dataroot = './file/emma'
 
 # ===============================================================
 # -- Inference parameters
