@@ -39,5 +39,5 @@ grid on;
 
 % Normalized
 figure;
-freqz(b, a, 'whole');
+freqz(b, a);
 grid on;
