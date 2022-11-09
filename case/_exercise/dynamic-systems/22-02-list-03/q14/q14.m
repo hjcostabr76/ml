@@ -16,8 +16,11 @@ figure;
 pzmap(H);
 
 %% Frequency response
+
 % Denormalized
 [h, w] = freqz(b, a, 'whole');
+h = fftshift(h);
+w = w - pi;
 
 figure;
 subplot(2, 1, 1);
